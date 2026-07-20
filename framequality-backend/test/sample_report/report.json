@@ -1,0 +1,596 @@
+{
+  "title": "Test Feature \u2014 Defect Reel",
+  "file": "defect_film.mov",
+  "profile": {
+    "key": "netflix_imf",
+    "name": "Netflix / IMF streaming delivery",
+    "description": "Photon/IMF-aligned source delivery. The strictest common target: 10-bit minimum, progressive only, -27 LKFS integrated, -2 dBTP ceiling.",
+    "notes": [
+      "Netflix expects textless elements and a separate M&E track; this engine checks the primary deliverable only."
+    ]
+  },
+  "score": {
+    "overall": 61.0,
+    "grade": "F",
+    "categories": {
+      "video": 64.6,
+      "audio": 67.9,
+      "subtitles": 28.6,
+      "structure": 63.2
+    },
+    "verdict": "FAIL",
+    "verdict_detail": "10 blocking issue(s) must be corrected before delivery.",
+    "counts": {
+      "fail": 10,
+      "warn": 2,
+      "pass": 13,
+      "info": 1
+    }
+  },
+  "source": {
+    "duration": 30.0,
+    "duration_tc": "00:00:30",
+    "size_bytes": 22216913,
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "video_codec": "h264",
+    "resolution": "1920x1080",
+    "fps": 24.0,
+    "pix_fmt": "yuvj420p",
+    "bit_depth": 8,
+    "start_timecode": null,
+    "audio_streams": [
+      {
+        "codec": "pcm_s16le",
+        "channels": 2,
+        "layout": "stereo",
+        "sample_rate": "48000",
+        "sample_fmt": "s16"
+      }
+    ],
+    "subtitle_streams": 0
+  },
+  "findings": [
+    {
+      "check": "loudness_integrated",
+      "label": "Integrated loudness",
+      "category": "audio",
+      "status": "fail",
+      "weight": 12,
+      "message": "Integrated loudness -15.8 LUFS is +11.2 dB off target. Apply a -11.2 dB static gain trim to the full mix.",
+      "measured": "-15.8 LUFS",
+      "expected": "-27 \u00b12 LKFS",
+      "fix": "Apply a single static gain trim to the full mix to hit target. Do not re-compress \u2014 that changes the mix the director approved.",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "video_levels",
+      "label": "Legal video levels",
+      "category": "video",
+      "status": "fail",
+      "weight": 9,
+      "message": "Illegal video levels on 76.9% of sampled frames (measured 0\u2013236, legal 16\u2013234).",
+      "measured": "0\u2013236",
+      "expected": "16\u2013234",
+      "fix": "Apply a broadcast-safe limiter in the grade. Do not use a blunt clamp \u2014 soft-clip the highlights and lift crushed blacks.",
+      "occurrences": [
+        {
+          "seconds": 0.875,
+          "timecode": "00:00:00:21",
+          "note": "luma 0 (legal 16\u2013234)",
+          "frame": "frames/001_levels_0s.jpg"
+        },
+        {
+          "seconds": 8.375,
+          "timecode": "00:00:08:09",
+          "note": "luma 0 (legal 16\u2013234)",
+          "frame": "frames/002_levels_8s.jpg"
+        },
+        {
+          "seconds": 8.66667,
+          "timecode": "00:00:08:16",
+          "note": "luma 236 (legal 16\u2013234)",
+          "frame": "frames/003_levels_8s.jpg"
+        },
+        {
+          "seconds": 8.95833,
+          "timecode": "00:00:08:23",
+          "note": "luma 235 (legal 16\u2013234)",
+          "frame": "frames/004_levels_8s.jpg"
+        }
+      ],
+      "occurrence_count": 4
+    },
+    {
+      "check": "timecode",
+      "label": "Embedded timecode",
+      "category": "structure",
+      "status": "fail",
+      "weight": 8,
+      "message": "No embedded start timecode found.",
+      "measured": "absent",
+      "expected": "present (e.g. 01:00:00:00)",
+      "fix": "Rewrap with a start timecode track (01:00:00:00 for the first frame of picture is the usual convention).",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "subtitle_timing",
+      "label": "Subtitle duration and gaps",
+      "category": "subtitles",
+      "status": "fail",
+      "weight": 8,
+      "message": "2 event(s) below minimum duration, 0 above maximum, 1 sub-minimum or negative gap(s).",
+      "measured": "3 timing issues in 4 events",
+      "expected": "0.83\u20137s, gap >= 0.083s",
+      "fix": "Extend short events to the spec minimum and enforce the minimum inter-event gap. Most subtitle editors can batch-fix this.",
+      "occurrences": [
+        {
+          "seconds": 1.0,
+          "timecode": "00:00:01:00",
+          "note": "0.30s (min 0.83s): This one is far too short to read comfortably.",
+          "frame": null
+        },
+        {
+          "seconds": 4.5,
+          "timecode": "00:00:04:12",
+          "note": "0.50s (min 0.83s): This single line is deliberately much longer than the forty-",
+          "frame": null
+        },
+        {
+          "seconds": 1.3,
+          "timecode": "00:00:01:07",
+          "note": "gap 0.020s to next event",
+          "frame": null
+        }
+      ],
+      "occurrence_count": 3
+    },
+    {
+      "check": "bit_depth",
+      "label": "Bit depth",
+      "category": "video",
+      "status": "fail",
+      "weight": 7,
+      "message": "8-bit master; this target requires 10-bit or higher.",
+      "measured": "8-bit",
+      "expected": ">= 10-bit",
+      "fix": "Re-render from the online at 10-bit or higher. 8-bit masters band in gradients and will be rejected.",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "audio_bit_depth",
+      "label": "Audio bit depth / sample rate",
+      "category": "audio",
+      "status": "fail",
+      "weight": 6,
+      "message": "Audio format: 16-bit (need 24-bit).",
+      "measured": "16-bit / 48000 Hz",
+      "expected": "24-bit / 48000 Hz",
+      "fix": "Deliver 24-bit / 48 kHz PCM. Never upsample a 16-bit mix and call it 24-bit \u2014 re-render from the session.",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "subtitle_formatting",
+      "label": "Line length and line count",
+      "category": "subtitles",
+      "status": "fail",
+      "weight": 6,
+      "message": "0 event(s) exceed 2 lines; 2 exceed 42 characters per line.",
+      "measured": "2 formatting issues",
+      "expected": "<= 2 lines, <= 42 chars/line",
+      "fix": "Re-break the offending events. Break on grammatical clauses, not at the character limit.",
+      "occurrences": [
+        {
+          "seconds": 1.0,
+          "timecode": "00:00:01:00",
+          "note": "1 lines, longest 46 chars: This one is far too short to read comfortably.",
+          "frame": null
+        },
+        {
+          "seconds": 4.5,
+          "timecode": "00:00:04:12",
+          "note": "1 lines, longest 91 chars: This single line is deliberately much longer than the forty-",
+          "frame": null
+        }
+      ],
+      "occurrence_count": 2
+    },
+    {
+      "check": "subtitle_reading_speed",
+      "label": "Reading speed",
+      "category": "subtitles",
+      "status": "fail",
+      "weight": 6,
+      "message": "2 of 4 events exceed 20 characters/second.",
+      "measured": "2 events too fast, peak 182.0 cps",
+      "expected": "<= 20 cps",
+      "fix": "Condense the text or extend the event. Reading speed above spec is the most common subtitle QC failure.",
+      "occurrences": [
+        {
+          "seconds": 4.5,
+          "timecode": "00:00:04:12",
+          "note": "182.0 cps: This single line is deliberately much longer than the forty-",
+          "frame": null
+        },
+        {
+          "seconds": 1.0,
+          "timecode": "00:00:01:00",
+          "note": "153.3 cps: This one is far too short to read comfortably.",
+          "frame": null
+        }
+      ],
+      "occurrence_count": 2
+    },
+    {
+      "check": "color_tags",
+      "label": "Colour primaries / transfer / matrix",
+      "category": "video",
+      "status": "fail",
+      "weight": 6,
+      "message": "Colour primaries, transfer, matrix not tagged. Downstream systems will guess, and they often guess wrong.",
+      "measured": "missing: primaries, transfer, matrix",
+      "expected": "primaries + transfer + matrix all tagged",
+      "fix": "Rewrap with explicit colour tags (e.g. bt709 / bt709 / bt709). Untagged masters get misinterpreted downstream.",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "black_frames",
+      "label": "Unexpected black",
+      "category": "video",
+      "status": "fail",
+      "weight": 6,
+      "message": "1 black segment(s) longer than the 4s limit inside the picture.",
+      "measured": "longest 6.0s",
+      "expected": "<= 4s",
+      "fix": "Confirm these are intentional. Mid-content black longer than the spec limit reads as a dropout to automated QC.",
+      "occurrences": [
+        {
+          "seconds": 23.0,
+          "timecode": "00:00:20:00",
+          "note": "6.0s of black",
+          "frame": "frames/005_black_19s.jpg"
+        }
+      ],
+      "occurrence_count": 1
+    },
+    {
+      "check": "duration",
+      "label": "Runtime",
+      "category": "structure",
+      "status": "warn",
+      "weight": 6,
+      "message": "Runtime is 00:00:30 \u2014 short for a feature. Confirm this is the full picture and not a reel or excerpt.",
+      "measured": "00:00:30",
+      "expected": "> 60 min for a feature",
+      "fix": "Confirm the runtime matches the delivery paperwork. A mismatch means a missing or duplicated reel.",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "metadata_completeness",
+      "label": "Metadata completeness",
+      "category": "structure",
+      "status": "warn",
+      "weight": 4,
+      "message": "Missing metadata field(s): title.",
+      "measured": "missing: title",
+      "expected": "populated",
+      "fix": "Populate title, aspect ratio and creation metadata at rewrap.",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "loudness_range",
+      "label": "Loudness range (LRA)",
+      "category": "audio",
+      "status": "info",
+      "weight": 5,
+      "message": "Loudness range 0.0 LU.",
+      "measured": "0.0 LU",
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "channel_layout",
+      "label": "Channel configuration",
+      "category": "audio",
+      "status": "pass",
+      "weight": 10,
+      "message": "Channel layout stereo (2ch) conforms.",
+      "measured": "stereo",
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "dead_channels",
+      "label": "Silent or dead channels",
+      "category": "audio",
+      "status": "pass",
+      "weight": 10,
+      "message": "All 2 channels carry signal.",
+      "measured": null,
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "true_peak",
+      "label": "True peak ceiling",
+      "category": "audio",
+      "status": "pass",
+      "weight": 10,
+      "message": "True peak -15.1 dBTP is under the ceiling.",
+      "measured": "-15.1 dBTP",
+      "expected": "<= -2 dBTP",
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "container_integrity",
+      "label": "Container / stream integrity",
+      "category": "structure",
+      "status": "pass",
+      "weight": 10,
+      "message": "Full decode completed with no stream errors.",
+      "measured": "0 decode errors",
+      "expected": "0 decode errors",
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "codec_conformance",
+      "label": "Video codec / wrapper",
+      "category": "video",
+      "status": "pass",
+      "weight": 10,
+      "message": "Codec h264 is accepted.",
+      "measured": "h264",
+      "expected": "prores, jpeg2000, ffv1, h264, hevc, dnxhd",
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "resolution",
+      "label": "Raster size",
+      "category": "video",
+      "status": "pass",
+      "weight": 10,
+      "message": "Raster 1920x1080 conforms.",
+      "measured": "1920x1080",
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "frame_rate",
+      "label": "Frame rate",
+      "category": "video",
+      "status": "pass",
+      "weight": 10,
+      "message": "24.0 fps conforms.",
+      "measured": "24.0 fps",
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "audio_sync",
+      "label": "A/V sync drift",
+      "category": "audio",
+      "status": "pass",
+      "weight": 8,
+      "message": "Audio and picture stream lengths match within one frame.",
+      "measured": null,
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "subtitle_presence",
+      "label": "Subtitle / caption track present",
+      "category": "subtitles",
+      "status": "pass",
+      "weight": 8,
+      "message": "Sidecar subtitle file supplied with 4 events.",
+      "measured": "4 events",
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "scan_type",
+      "label": "Scan type / interlacing",
+      "category": "video",
+      "status": "pass",
+      "weight": 8,
+      "message": "Progressive throughout.",
+      "measured": "progressive",
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "freeze_frames",
+      "label": "Frozen / repeated frames",
+      "category": "video",
+      "status": "pass",
+      "weight": 8,
+      "message": "No frozen or repeated-frame passages.",
+      "measured": null,
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "head_tail_black",
+      "label": "Head / tail black",
+      "category": "structure",
+      "status": "pass",
+      "weight": 6,
+      "message": "Head and tail black within spec (0.0s / 0.0s).",
+      "measured": null,
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    },
+    {
+      "check": "dead_pixels",
+      "label": "Stuck / dead pixels",
+      "category": "video",
+      "status": "pass",
+      "weight": 5,
+      "message": "No stuck-pixel signature detected.",
+      "measured": null,
+      "expected": null,
+      "fix": "",
+      "occurrences": [],
+      "occurrence_count": 0
+    }
+  ],
+  "action_list": [
+    {
+      "priority": 1,
+      "severity": "fail",
+      "area": "audio",
+      "issue": "Integrated loudness",
+      "detail": "Integrated loudness -15.8 LUFS is +11.2 dB off target. Apply a -11.2 dB static gain trim to the full mix.",
+      "fix": "Apply a single static gain trim to the full mix to hit target. Do not re-compress \u2014 that changes the mix the director approved.",
+      "at": []
+    },
+    {
+      "priority": 2,
+      "severity": "fail",
+      "area": "video",
+      "issue": "Legal video levels",
+      "detail": "Illegal video levels on 76.9% of sampled frames (measured 0\u2013236, legal 16\u2013234).",
+      "fix": "Apply a broadcast-safe limiter in the grade. Do not use a blunt clamp \u2014 soft-clip the highlights and lift crushed blacks.",
+      "at": [
+        "00:00:00:21",
+        "00:00:08:09",
+        "00:00:08:16",
+        "00:00:08:23"
+      ]
+    },
+    {
+      "priority": 3,
+      "severity": "fail",
+      "area": "structure",
+      "issue": "Embedded timecode",
+      "detail": "No embedded start timecode found.",
+      "fix": "Rewrap with a start timecode track (01:00:00:00 for the first frame of picture is the usual convention).",
+      "at": []
+    },
+    {
+      "priority": 4,
+      "severity": "fail",
+      "area": "subtitles",
+      "issue": "Subtitle duration and gaps",
+      "detail": "2 event(s) below minimum duration, 0 above maximum, 1 sub-minimum or negative gap(s).",
+      "fix": "Extend short events to the spec minimum and enforce the minimum inter-event gap. Most subtitle editors can batch-fix this.",
+      "at": [
+        "00:00:01:00",
+        "00:00:04:12",
+        "00:00:01:07"
+      ]
+    },
+    {
+      "priority": 5,
+      "severity": "fail",
+      "area": "video",
+      "issue": "Bit depth",
+      "detail": "8-bit master; this target requires 10-bit or higher.",
+      "fix": "Re-render from the online at 10-bit or higher. 8-bit masters band in gradients and will be rejected.",
+      "at": []
+    },
+    {
+      "priority": 6,
+      "severity": "fail",
+      "area": "audio",
+      "issue": "Audio bit depth / sample rate",
+      "detail": "Audio format: 16-bit (need 24-bit).",
+      "fix": "Deliver 24-bit / 48 kHz PCM. Never upsample a 16-bit mix and call it 24-bit \u2014 re-render from the session.",
+      "at": []
+    },
+    {
+      "priority": 7,
+      "severity": "fail",
+      "area": "subtitles",
+      "issue": "Line length and line count",
+      "detail": "0 event(s) exceed 2 lines; 2 exceed 42 characters per line.",
+      "fix": "Re-break the offending events. Break on grammatical clauses, not at the character limit.",
+      "at": [
+        "00:00:01:00",
+        "00:00:04:12"
+      ]
+    },
+    {
+      "priority": 8,
+      "severity": "fail",
+      "area": "subtitles",
+      "issue": "Reading speed",
+      "detail": "2 of 4 events exceed 20 characters/second.",
+      "fix": "Condense the text or extend the event. Reading speed above spec is the most common subtitle QC failure.",
+      "at": [
+        "00:00:04:12",
+        "00:00:01:00"
+      ]
+    },
+    {
+      "priority": 9,
+      "severity": "fail",
+      "area": "video",
+      "issue": "Colour primaries / transfer / matrix",
+      "detail": "Colour primaries, transfer, matrix not tagged. Downstream systems will guess, and they often guess wrong.",
+      "fix": "Rewrap with explicit colour tags (e.g. bt709 / bt709 / bt709). Untagged masters get misinterpreted downstream.",
+      "at": []
+    },
+    {
+      "priority": 10,
+      "severity": "fail",
+      "area": "video",
+      "issue": "Unexpected black",
+      "detail": "1 black segment(s) longer than the 4s limit inside the picture.",
+      "fix": "Confirm these are intentional. Mid-content black longer than the spec limit reads as a dropout to automated QC.",
+      "at": [
+        "00:00:20:00"
+      ]
+    },
+    {
+      "priority": 11,
+      "severity": "warn",
+      "area": "structure",
+      "issue": "Runtime",
+      "detail": "Runtime is 00:00:30 \u2014 short for a feature. Confirm this is the full picture and not a reel or excerpt.",
+      "fix": "Confirm the runtime matches the delivery paperwork. A mismatch means a missing or duplicated reel.",
+      "at": []
+    },
+    {
+      "priority": 12,
+      "severity": "warn",
+      "area": "structure",
+      "issue": "Metadata completeness",
+      "detail": "Missing metadata field(s): title.",
+      "fix": "Populate title, aspect ratio and creation metadata at rewrap.",
+      "at": []
+    }
+  ]
+}

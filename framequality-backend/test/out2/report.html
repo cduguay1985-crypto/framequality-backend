@@ -1,0 +1,103 @@
+<!doctype html><meta charset="utf-8">
+<title>QC Report — Test Feature</title>
+<style>
+ :root{--ink:#16181d;--muted:#6b7280;--rule:#e3e5e9}
+ *{box-sizing:border-box}
+ body{font:14px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+   color:var(--ink);margin:0;padding:32px;max-width:1000px}
+ h1{font-size:26px;margin:0 0 4px} h2{font-size:16px;margin:34px 0 10px}
+ h3{font-size:14px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+ h3 small{color:var(--muted);font-weight:400}
+ .sub{color:var(--muted);margin:0 0 22px}
+ .band{display:flex;gap:26px;align-items:center;background:#f4f5f7;
+   border:1px solid var(--rule);border-radius:10px;padding:20px 24px}
+ .score{font-size:42px;font-weight:700;line-height:1;color:#b3261e}
+ .score span{font-size:15px;color:var(--muted);font-weight:400}
+ .verdict{font-size:18px;font-weight:700;color:#b3261e}
+ .cat{display:grid;grid-template-columns:120px 1fr 46px;align-items:center;
+   gap:12px;margin:7px 0}
+ .catname{color:var(--muted)} .catval{text-align:right;font-variant-numeric:tabular-nums}
+ .bar{height:9px;background:#eceef1;border-radius:5px;overflow:hidden}
+ .bar i{display:block;height:100%}
+ .chip{font-size:10.5px;font-weight:700;letter-spacing:.4px;padding:2px 7px;
+   border-radius:4px;border:1px solid}
+ .finding{border:1px solid var(--rule);border-radius:10px;padding:16px 18px;
+   margin:12px 0}
+ .finding p{margin:6px 0}
+ .meta,.occ{font-size:12.5px;color:var(--muted)}
+ .fix{background:#f2f6fc;border-left:3px solid #1f3a5f;padding:9px 12px;
+   border-radius:0 6px 6px 0;font-size:13px}
+ table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px}
+ th,td{border:1px solid var(--rule);padding:6px 9px;text-align:left}
+ th{background:#f4f5f7} .tc{font-variant-numeric:tabular-nums;white-space:nowrap}
+ .frames{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+ figure{margin:0;width:220px}
+ figure img{width:100%;border:1px solid var(--rule);border-radius:6px;display:block}
+ figcaption{font-size:11.5px;color:var(--muted);margin-top:4px}
+</style>
+<h1>Test Feature</h1>
+<p class="sub">Generic / festival screener &nbsp;·&nbsp;
+  00:00:30 &nbsp;·&nbsp; defect_film.mov</p>
+<div class="band">
+  <div><div class="score">81<span>/100</span></div>
+    <div style="color:var(--muted);font-size:12px">GRADE C</div></div>
+  <div><div class="verdict">FAIL</div>
+    <div>1 blocking issue(s) must be corrected before delivery.</div>
+    <div style="color:var(--muted);font-size:12.5px;margin-top:4px">
+      <b>1</b> blocking ·
+      <b>4</b> review ·
+      <b>15</b> passed</div></div>
+</div>
+<h2>Category scores</h2><div class="cat"><div class="catname">Video</div><div class="bar"><i style="width:93%;background:#1a7f37"></i></div><div class="catval">93</div></div><div class="cat"><div class="catname">Audio</div><div class="bar"><i style="width:100%;background:#1a7f37"></i></div><div class="catval">100</div></div><div class="cat"><div class="catname">Subtitles</div><div class="bar"><i style="width:0%;background:#b3261e"></i></div><div class="catval">0</div></div><div class="cat"><div class="catname">Structure</div><div class="bar"><i style="width:78%;background:#9a6700"></i></div><div class="catval">78</div></div>
+<h2>What needs to be fixed</h2>
+
+        <section class="finding">
+          <h3><span class="chip" style="background:#b3261e1a;color:#b3261e;border-color:#b3261e55">FAIL</span> 1. Subtitle / caption track present
+            <small>subtitles</small></h3>
+          <p>No subtitle or caption track found, and no sidecar file supplied.</p>
+          <p class="meta"><b>Measured:</b> none
+             &nbsp;·&nbsp; <b>Required:</b> at least one track</p>
+          <p class="fix"><b>Suggested fix:</b> Attach the sidecar subtitle file or embed the caption track. Most streaming targets reject delivery without one.</p>
+          
+          
+        </section>
+        <section class="finding">
+          <h3><span class="chip" style="background:#9a67001a;color:#9a6700;border-color:#9a670055">REVIEW</span> 2. Runtime
+            <small>structure</small></h3>
+          <p>Runtime is 00:00:30 — short for a feature. Confirm this is the full picture and not a reel or excerpt.</p>
+          <p class="meta"><b>Measured:</b> 00:00:30
+             &nbsp;·&nbsp; <b>Required:</b> &gt; 60 min for a feature</p>
+          <p class="fix"><b>Suggested fix:</b> Confirm the runtime matches the delivery paperwork. A mismatch means a missing or duplicated reel.</p>
+          
+          
+        </section>
+        <section class="finding">
+          <h3><span class="chip" style="background:#9a67001a;color:#9a6700;border-color:#9a670055">REVIEW</span> 3. Colour primaries / transfer / matrix
+            <small>video</small></h3>
+          <p>Colour primaries, transfer, matrix not tagged.</p>
+          <p class="meta"><b>Measured:</b> missing: primaries, transfer, matrix
+             &nbsp;·&nbsp; <b>Required:</b> —</p>
+          <p class="fix"><b>Suggested fix:</b> Rewrap with explicit colour tags (e.g. bt709 / bt709 / bt709). Untagged masters get misinterpreted downstream.</p>
+          
+          
+        </section>
+        <section class="finding">
+          <h3><span class="chip" style="background:#9a67001a;color:#9a6700;border-color:#9a670055">REVIEW</span> 4. Unexpected black
+            <small>video</small></h3>
+          <p>1 short black segment(s) inside the picture — confirm these are intentional transitions.</p>
+          <p class="meta"><b>Measured:</b> 1 segments
+             &nbsp;·&nbsp; <b>Required:</b> &lt;= 8s each</p>
+          <p class="fix"><b>Suggested fix:</b> Confirm these are intentional. Mid-content black longer than the spec limit reads as a dropout to automated QC.</p>
+          <table class="occ"><tr><th>Timecode</th><th>Detail</th></tr><tr><td class="tc">00:00:20:00</td><td>6.0s</td></tr></table>
+          
+        </section>
+        <section class="finding">
+          <h3><span class="chip" style="background:#9a67001a;color:#9a6700;border-color:#9a670055">REVIEW</span> 5. Metadata completeness
+            <small>structure</small></h3>
+          <p>Missing metadata field(s): title.</p>
+          <p class="meta"><b>Measured:</b> missing: title
+             &nbsp;·&nbsp; <b>Required:</b> populated</p>
+          <p class="fix"><b>Suggested fix:</b> Populate title, aspect ratio and creation metadata at rewrap.</p>
+          
+          
+        </section>

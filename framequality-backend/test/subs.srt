@@ -1,0 +1,15 @@
+1
+00:00:01,000 --> 00:00:01,300
+This one is far too short to read comfortably.
+
+2
+00:00:01,320 --> 00:00:04,000
+A perfectly normal line of dialogue.
+
+3
+00:00:04,050 --> 00:00:05,000
+This single line is deliberately much longer than the forty-two character limit allows for.
+
+4
+00:00:05,100 --> 00:00:12,000
+Held far too long on screen.
